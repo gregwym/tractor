@@ -68,6 +68,47 @@ angular.module('tractorApp')
       unsyncUpdates: function (modelName) {
         socket.removeAllListeners(modelName + ':save');
         socket.removeAllListeners(modelName + ':remove');
-      }
+      },
+
+      /**
+       * Register listeners to sync an item with updates on a model
+       *
+       * Takes the item we want to sync, the model name that socket updates are sent from,
+       * and an optional callback function after new items are updated.
+       *
+       * @param {String} modelName
+       * @param {Object} item
+       * @param {Function} cb
+       */
+      syncItemUpdates: function (modelName, item, cb) {
+        cb = cb || angular.noop;
+
+        /**
+         * Syncs item creation/updates on 'model:save'
+         */
+        socket.on([modelName, item._id, 'save'].join(':'), function (update) {
+          var event = 'update';
+          _(item).extend(update);
+          cb(event, item, update);
+        });
+
+        /**
+         * Syncs removed items on 'model:<item._id>:remove'
+         */
+        socket.on([modelName, item._id, 'remove'].join(':'), function (update) {
+          var event = 'deleted';
+          cb(event, item, update);
+        });
+      },
+
+      /**
+       * Removes listeners for an item of model updates on the socket
+       *
+       * @param modelName
+       */
+      unsyncItemUpdates: function (modelName, item) {
+        socket.removeAllListeners([modelName, item._id, 'save']);
+        socket.removeAllListeners([modelName, item._id, 'remove']);
+      },
     };
   });
