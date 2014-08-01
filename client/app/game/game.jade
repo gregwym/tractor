@@ -1,2 +1,25 @@
-.col-md-12
-    | This is the game view.
+div(ng-include='"components/navbar/navbar.html"')
+
+header#banner.hero-unit
+  .container
+    h1 Welcome to "{{ game.name }}"
+    p.lead Created by {{ game.creator.name }}
+.container
+  .row
+    .col-md-8
+      | This is the game view.
+    .col-md-4
+      .panel.panel-default
+        .panel-heading
+          .panel-title Players
+        .panel-body
+          ul.list-group
+            li.list-group-item(ng-repeat="player in game.players")
+              {{ player.name }}
+      .panel.panel-default
+        .panel-heading
+          .panel-title Chat
+        .panel-body
+          ul.list-group
+            li.list-group-item(ng-repeat="message in chat.messages | orderBy:chat.date:reverse")
+              {{ message.sender }}: {{ message.content }}
