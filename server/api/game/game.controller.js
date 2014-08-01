@@ -13,11 +13,15 @@ exports.index = function(req, res) {
 
 // Get a single game
 exports.show = function(req, res) {
-  Game.findById(req.params.id, function (err, game) {
-    if(err) { return handleError(res, err); }
-    if(!game) { return res.send(404); }
-    return res.json(game);
-  });
+  Game
+    .findById(req.params.id)
+    .populate('creator', 'name email')
+    .populate('players', 'name email')
+    .exec(function (err, game) {
+      if(err) { return handleError(res, err); }
+      if(!game) { return res.send(404); }
+      return res.json(game);
+    });
 };
 
 // Creates a new game in the DB.
@@ -37,8 +41,22 @@ exports.update = function(req, res) {
   Game.findById(req.params.id, function (err, game) {
     if (err) { return handleError(res, err); }
     if(!game) { return res.send(404); }
-    var updated = _.merge(game, req.body);
-    updated.save(function (err) {
+
+    var player = _(game.players).find(req.user._id);
+    if (req.body.join) {
+      if (!player) {
+        game.players.push(req.user);
+      }
+    } else if (req.body.quit) {
+      if (player) {
+        _(game.players).remove(req.user._id);
+      }
+    } else {
+      _(game).merge(req.body);
+    }
+    console.log(game);
+
+    game.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, game);
     });
