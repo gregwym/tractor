@@ -16,9 +16,15 @@ exports.register = function(socket) {
 }
 
 function onSave(socket, doc, cb) {
-  socket.emit('game:save', doc);
+  doc
+    .populate('creator', 'name email')
+    .populate('players', 'name email', function(err, doc) {
+      socket.emit('game:save', doc);
+      socket.emit(['game', doc._id, 'save'].join(':'), doc);
+    });
 }
 
 function onRemove(socket, doc, cb) {
   socket.emit('game:remove', doc);
+  socket.emit(['game', doc._id, 'remove'].join(':'), doc);
 }
