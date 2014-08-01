@@ -22,7 +22,10 @@ exports.show = function(req, res) {
 
 // Creates a new game in the DB.
 exports.create = function(req, res) {
-  Game.create(req.body, function(err, game) {
+  var game = _.extend({
+    creator: req.user
+  }, req.body);
+  Game.create(game, function(err, game) {
     if(err) { return handleError(res, err); }
     return res.json(201, game);
   });

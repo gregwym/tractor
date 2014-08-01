@@ -2,26 +2,26 @@
 
 angular.module('tractorApp')
   .controller('MainCtrl', function ($scope, $http, socket) {
-    $scope.awesomeThings = [];
+    $scope.games = [];
 
-    $http.get('/api/things').success(function(awesomeThings) {
-      $scope.awesomeThings = awesomeThings;
-      socket.syncUpdates('thing', $scope.awesomeThings);
+    $http.get('/api/games').success(function(games) {
+      $scope.games = games;
+      socket.syncUpdates('game', $scope.games);
     });
 
-    $scope.addThing = function() {
-      if($scope.newThing === '') {
+    $scope.createGame = function() {
+      if($scope.newGameName === '') {
         return;
       }
-      $http.post('/api/things', { name: $scope.newThing });
-      $scope.newThing = '';
+      $http.post('/api/games', { name: $scope.newGameName });
+      $scope.newGameName = '';
     };
 
-    $scope.deleteThing = function(thing) {
-      $http.delete('/api/things/' + thing._id);
+    $scope.deleteGame = function(game) {
+      $http.delete('/api/games/' + game._id);
     };
 
     $scope.$on('$destroy', function () {
-      socket.unsyncUpdates('thing');
+      socket.unsyncUpdates('game');
     });
   });

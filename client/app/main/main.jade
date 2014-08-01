@@ -2,26 +2,26 @@ div(ng-include='"components/navbar/navbar.html"')
 
 header#banner.hero-unit
   .container
-    h1 'Allo, 'Allo!
-    p.lead Kick-start your next web app with Angular Fullstack
+    h1 Welcome to Tractor!
+    p.lead 升级! 升级! 升级! 升级!
     img(src='assets/images/yeoman.png', alt='I\'m Yeoman')
 
 .container
   .row
     .col-lg-12
-      h1.page-header Features:
-      ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='thing in awesomeThings')
+      h1.page-header On-going games:
+      ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='game in games')
         li
-          a(href='#', tooltip='{{thing.info}}')
-            | {{thing.name}}
-            button.close(type='button', ng-click='deleteThing(thing)') ×
+          a(ui-sref='game({ id: game._id })', tooltip='{{game.players.length}} / 4')
+            | {{game.name}}
+            button.close(type='button', ng-click='deleteGame(game)') ×
 
   form.thing-form
-    label Syncs in realtime across clients
+    label Create a new game
     p.input-group
-      input.form-control(type='text', placeholder='Add a new thing here.', ng-model='newThing')
+      input.form-control(type='text', placeholder='Create a new game here.', ng-model='newGameName')
       span.input-group-btn
-        button.btn.btn-primary(type='submit', ng-click='addThing()') Add New
+        button.btn.btn-primary(type='submit', ng-click='createGame()') Create!
 
 footer.footer
   .container
