@@ -6,10 +6,10 @@ angular.module('tractorApp')
 
     var gameId = $stateParams.id;
     var gameUrl = '/api/games/' + gameId;
-    var currentUser = Auth.getCurrentUser();
 
     var init = function() {
       $scope.newMessage = '';
+      $scope.user = Auth.getCurrentUser();
 
       $http.get(gameUrl).success(function(game) {
         $scope.game = game;
@@ -21,7 +21,7 @@ angular.module('tractorApp')
         });
 
         $http.put(gameUrl, {
-          join: currentUser
+          join: $scope.user
         });
       });
     };
@@ -31,7 +31,7 @@ angular.module('tractorApp')
         socket.unsyncItemUpdates('game', $scope.game);
       }
       $http.put(gameUrl, {
-        quit: currentUser
+        quit: $scope.user
       });
 
       _.each(off, function(unbind) {
