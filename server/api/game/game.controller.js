@@ -42,19 +42,18 @@ exports.update = function(req, res) {
     if (err) { return handleError(res, err); }
     if(!game) { return res.send(404); }
 
-    var player = _(game.players).find(req.user._id);
+    var playerIndex = game.players.indexOf(req.user._id);
     if (req.body.join) {
-      if (!player) {
-        game.players.push(req.user);
+      if (playerIndex < 0) {
+        game.players.push(req.user._id);
       }
     } else if (req.body.quit) {
-      if (player) {
-        _(game.players).remove(req.user._id);
+      if (playerIndex >= 0) {
+        game.players.splice(playerIndex, 1);
       }
     } else {
-      _(game).merge(req.body);
+      _.merge(game, req.body);
     }
-    console.log(game);
 
     game.save(function (err) {
       if (err) { return handleError(res, err); }
