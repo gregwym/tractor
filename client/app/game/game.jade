@@ -12,14 +12,17 @@ header#banner.hero-unit
       .panel.panel-default
         .panel-heading
           .panel-title Players
-        .panel-body
-          ul.list-group
-            li.list-group-item(ng-repeat="player in game.players")
-              {{ player.name }}
+        ul.list-group
+          li.list-group-item(ng-repeat="player in game.players")
+            {{ player.name }}
       .panel.panel-default
         .panel-heading
           .panel-title Chat
-        .panel-body
-          ul.list-group
-            li.list-group-item(ng-repeat="message in chat.messages | orderBy:chat.date:reverse")
-              {{ message.sender }}: {{ message.content }}
+        ul.list-group
+          li.list-group-item(ng-repeat="message in game.messages | orderBy:message.date:reverse")
+            {{ message.sender }}: {{ message.content }}
+          li.list-group-item
+            form.input-group
+              input.form-control(type="text", ng-model="newMessage")
+              .input-group-btn
+                button.btn.btn-primary(type="submit", ng-disabled="newMessage.length === 0", ng-click="sendMessage()") Send

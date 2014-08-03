@@ -14,7 +14,12 @@ var GameSchema = new Schema({
   players: [{
     type: Schema.Types.ObjectId,
     ref: 'User'
-  }]
+  }],
+  messages: [{
+    sender: String,
+    date: Date,
+    content: String
+  }],
 });
 
 module.exports = mongoose.model('Game', GameSchema);

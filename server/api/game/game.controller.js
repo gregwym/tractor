@@ -51,6 +51,12 @@ exports.update = function(req, res) {
       if (playerIndex >= 0) {
         game.players.splice(playerIndex, 1);
       }
+    } else if (req.body.message) {
+      game.messages.push({
+        sender: req.user.name,
+        date: new Date(),
+        content: req.body.message
+      });
     } else {
       _.merge(game, req.body);
     }

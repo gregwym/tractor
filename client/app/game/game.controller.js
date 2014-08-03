@@ -9,6 +9,7 @@ angular.module('tractorApp')
     var currentUser = Auth.getCurrentUser();
 
     var init = function() {
+      $scope.newMessage = '';
 
       $http.get(gameUrl).success(function(game) {
         $scope.game = game;
@@ -37,6 +38,13 @@ angular.module('tractorApp')
         unbind();
       });
       off = null;
+    };
+
+    $scope.sendMessage = function() {
+      $http.put(gameUrl, {
+        message: $scope.newMessage
+      });
+      $scope.newMessage = '';
     };
 
     off.push($scope.$on('$destroy', function () {
