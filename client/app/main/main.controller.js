@@ -2,12 +2,25 @@
 
 angular.module('tractorApp')
   .controller('MainCtrl', function ($scope, $http, socket) {
-    $scope.games = [];
+    var off = [];
 
-    $http.get('/api/games').success(function(games) {
-      $scope.games = games;
-      socket.syncUpdates('game', $scope.games);
-    });
+    var init = function() {
+      $scope.games = [];
+
+      $http.get('/api/games').success(function(games) {
+        $scope.games = games;
+        socket.syncUpdates('game', $scope.games);
+      });
+    };
+
+    var destructor = function() {
+      socket.unsyncUpdates('game');
+
+      _.each(off, function(unbind) {
+        unbind();
+      });
+      off = null;
+    };
 
     $scope.createGame = function() {
       if($scope.newGameName === '') {
@@ -21,7 +34,6 @@ angular.module('tractorApp')
       $http.delete('/api/games/' + game._id);
     };
 
-    $scope.$on('$destroy', function () {
-      socket.unsyncUpdates('game');
-    });
+    off.push($scope.$on('$destroy', destructor));
+    init();
   });

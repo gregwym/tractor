@@ -47,8 +47,6 @@ angular.module('tractorApp')
       $scope.newMessage = '';
     };
 
-    off.push($scope.$on('$destroy', function () {
-      destructor();
-    }));
+    off.push($scope.$on('$destroy', destructor));
     init();
   });
