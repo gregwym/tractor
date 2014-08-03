@@ -19,12 +19,13 @@ header#banner.hero-unit
         .panel-heading
           .panel-title Chat
         ul.list-group
-          li.list-group-item(ng-repeat="message in game.messages | orderBy:'date':true")
-            span.badge.pull-right {{ message.date | date: 'h:mm' }}
-            span.label(ng-class="message.sender === user.name ? 'label-success' : 'label-primary'") {{ message.sender }}
-            span  {{ message.content }}
           li.list-group-item
             form.input-group
               input.form-control(type="text", ng-model="newMessage")
               .input-group-btn
                 button.btn.btn-primary(type="submit", ng-disabled="newMessage.length === 0", ng-click="sendMessage()") Send
+        ul.list-group(style="max-height: 300px; overflow: auto")
+          li.list-group-item(ng-repeat="message in game.messages | orderBy:'date':true")
+            span.badge.pull-right {{ message.date | date: 'h:mm' }}
+            span.label(ng-class="message.sender === user.name ? 'label-success' : 'label-primary'") {{ message.sender }}
+            span  {{ message.content }}
