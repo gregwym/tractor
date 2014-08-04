@@ -4,6 +4,7 @@ describe('Controller: GameCtrl', function () {
 
   // load the controller's module
   beforeEach(module('tractorApp'));
+  beforeEach(module('socketMock'));
 
   var GameCtrl, scope;
 

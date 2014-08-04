@@ -4,17 +4,17 @@ header#banner.hero-unit
   .container
     h1 Welcome to Tractor!
     p.lead 升级! 升级! 升级! 升级!
-    img(src='assets/images/yeoman.png', alt='I\'m Yeoman')
+    img(src='assets/images/yeoman.png')
 
 .container
   .row
     .col-lg-12
       h1.page-header On-going games:
       ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='game in games')
-        li
-          a(ui-sref='game({ id: game._id })', tooltip='{{game.players.length}} / 4')
-            | {{game.name}}
-            button.close(type='button', ng-click='deleteGame(game)') ×
+        li(tooltip='{{game.players.length}} / 4')
+          a(ui-sref='game({ id: game._id })')
+            span.badge.pull-right(ng-click='deleteGame(game, $event)') ×
+            span {{game.name}}
 
   form.thing-form
     label Create a new game
@@ -26,6 +26,6 @@ header#banner.hero-unit
 footer.footer
   .container
     p
-      a(href='https://twitter.com/tyhenkel') @tyhenkel
+      a(href='https://twitter.com/gregwym') @gregwym
       = ' | '
-      a(href='https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open') Issues
+      a(href='https://github.com/gregwym/tractor/issues') Issues
