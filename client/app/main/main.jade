@@ -7,14 +7,14 @@ header#banner.hero-unit
     img(src='assets/images/yeoman.png')
 
 .container
-  .row
-    .col-lg-12
-      h1.page-header On-going games:
-      ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='game in games')
-        li(tooltip='{{game.players.length}} / 4')
-          a(ui-sref='game({ id: game._id })')
-            span.badge.pull-right(ng-click='deleteGame(game, $event)') ×
-            span {{game.name}}
+  .row.games
+    h1.page-header On-going games:
+    .col-xs-6.col-md-3.game(ng-repeat='game in games')
+      .thumbnail(tooltip='{{game.players.length}} / 4')
+        button.close.pull-right(ng-click='deleteGame(game, $event)') ×
+        a(ui-sref='game({ id: game._id })')
+          span.glyphicon.glyphicon-tower
+          span  {{game.name}}
 
   form.thing-form
     label Create a new game
