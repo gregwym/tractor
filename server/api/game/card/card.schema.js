@@ -22,4 +22,15 @@ var CardSchemaObj = {
 };
 var CardSchema = new Schema(CardSchemaObj);
 
+CardSchema.createDeck = function() {
+  return _.map(_.range(54), function(i) {
+    return {
+      suit: CardSchemaObj.suit.enum[Math.floor(i / 13)],
+      rank: CardSchemaObj.rank.enum[i % 13],
+      played: false,
+      owner: null
+    }
+  });
+}
+
 module.exports = CardSchema;

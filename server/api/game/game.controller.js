@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Game = require('./game.model');
+var CardSchema = require('./card/card.schema');
 
 // Get list of games
 exports.index = function(req, res) {
@@ -27,7 +28,8 @@ exports.show = function(req, res) {
 // Creates a new game in the DB.
 exports.create = function(req, res) {
   var game = _.extend({
-    creator: req.user
+    creator: req.user,
+    cards: CardSchema.createDeck(),
   }, req.body);
   Game.create(game, function(err, game) {
     if(err) { return handleError(res, err); }
