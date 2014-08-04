@@ -6,9 +6,12 @@ header#banner.hero-unit
     p.lead Created by {{ game.creator.name }}
 .container
   .row
-    .col-md-8
-      | This is the game view.
-    .col-md-4
+    .col-xs-12.col-md-8
+      .col-xs-6.col-md-4.game(ng-repeat='card in game.cards')
+        .thumbnail
+          span  {{card.suit}}
+          span  {{card.rank}}
+    .col-xs-12.col-md-4
       .panel.panel-default
         .panel-heading
           .panel-title Players
