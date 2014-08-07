@@ -7,10 +7,8 @@ header#banner.hero-unit
 .container
   .row
     .col-xs-12.col-md-8
-      .col-xs-6.col-md-4.game(ng-repeat='card in game.cards')
-        .thumbnail
-          span  {{card.suit}}
-          span  {{card.rank}}
+      .col-xs-1.col-md-1.game(ng-repeat='card in game.cards')
+        poker(suit="card.suit", rank="card.rank")
     .col-xs-12.col-md-4
       .panel.panel-default
         .panel-heading
