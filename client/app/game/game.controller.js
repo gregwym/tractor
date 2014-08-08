@@ -39,6 +39,12 @@ angular.module('tractorApp')
       off = null;
     };
 
+    $scope.startGame = function() {
+      $http.put(gameUrl, {
+        start: true
+      });
+    };
+
     $scope.sendMessage = function() {
       $http.put(gameUrl, {
         message: $scope.newMessage

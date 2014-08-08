@@ -10,6 +10,8 @@ header#banner.hero-unit
       .col-xs-1.col-md-1.game(ng-repeat='card in game.cards')
         poker(suit="card.suit", rank="card.rank")
     .col-xs-12.col-md-4
+      .btn-group
+        button.btn.btn-primary(type="button", ng-click="startGame()") Start
       .panel.panel-default
         .panel-heading
           .panel-title Players
