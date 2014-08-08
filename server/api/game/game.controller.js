@@ -29,6 +29,7 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   var game = _.extend({
     creator: req.user,
+    maxPlayers: 4,
     cards: CardSchema.createDeck(),
   }, req.body);
   Game.create(game, function(err, game) {
@@ -46,6 +47,10 @@ exports.update = function(req, res) {
 
     var playerIndex = game.players.indexOf(req.user._id);
     if (req.body.join) {
+      // If too many players, return 409 Conflict
+      if (game.players.length >= game.maxPlayers) {
+        return res.json(409, game);
+      }
       if (playerIndex < 0) {
         game.players.push(req.user._id);
       }

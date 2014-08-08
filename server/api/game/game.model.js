@@ -7,6 +7,7 @@ var GameSchema = new Schema({
   name: String,
   info: String,
   active: Boolean,
+  maxPlayers: Number,
   creator: {
     type: Schema.Types.ObjectId,
     ref: 'User'
