@@ -30,7 +30,6 @@ exports.create = function(req, res) {
   var game = _.extend({
     creator: req.user,
     maxPlayers: 4,
-    cards: CardSchema.createDeck(),
   }, req.body);
   Game.create(game, function(err, game) {
     if(err) { return handleError(res, err); }
@@ -46,26 +45,23 @@ exports.update = function(req, res) {
     if(!game) { return res.send(404); }
 
     var playerIndex = game.players.indexOf(req.user._id);
+    var rtnStatus;
     if (req.body.join) {
-      // If too many players, return 409 Conflict
-      if (game.players.length >= game.maxPlayers) {
-        return res.json(409, game);
-      }
-      if (playerIndex < 0) {
-        game.players.push(req.user._id);
-      }
+      rtnStatus = game.join(req.user._id) || 409;
     } else if (req.body.quit) {
-      if (playerIndex >= 0) {
-        game.players.splice(playerIndex, 1);
-      }
+      rtnStatus = game.quit(req.user._id) || 400;
+    } else if (req.body.start) {
+      game.resetCards();
+      game.shuffleCards();
     } else if (req.body.message) {
-      game.messages.push({
-        sender: req.user.name,
-        date: new Date(),
-        content: req.body.message
-      });
+      rtnStatus = game.addMessage(req.body.message, req.user.name)
     } else {
       _.merge(game, req.body);
+    }
+
+    // If return status is set, send it without saving
+    if (_.isNumber(rtnStatus)) {
+      return res.json(rtnStatus, game);
     }
 
     game.save(function (err) {

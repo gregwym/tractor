@@ -1,6 +1,8 @@
 'use strict';
 
+var _ = require('lodash');
 var mongoose = require('mongoose'),
+    CardSchema = require('./card/card.schema'),
     Schema = mongoose.Schema;
 
 var GameSchema = new Schema({
@@ -21,7 +23,43 @@ var GameSchema = new Schema({
     date: Date,
     content: String
   }],
-  cards: [require('./card/card.schema')],
+  cards: [CardSchema],
 });
+
+GameSchema.methods.join = function(userId) {
+  // If too many players, return 409 Conflict
+  if (this.players.length >= this.maxPlayers) {
+    return false;
+  }
+  if (this.players.indexOf(userId) < 0) {
+    this.players.push(userId);
+  }
+  return this;
+}
+
+GameSchema.methods.quit = function(userId) {
+  var playerIndex = this.players.indexOf(userId);
+  if (playerIndex < 0) {
+    return false;
+  }
+  this.players.splice(playerIndex, 1);
+  return this;
+}
+
+GameSchema.methods.addMessage = function(content, sender) {
+  this.messages.push({
+    sender: sender,
+    date: new Date(),
+    content: content
+  });
+}
+
+GameSchema.methods.resetCards = function() {
+  this.cards = CardSchema.createDeck();
+};
+
+GameSchema.methods.shuffleCards = function() {
+  this.cards = _.shuffle(this.cards);
+};
 
 module.exports = mongoose.model('Game', GameSchema);
