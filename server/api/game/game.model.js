@@ -27,7 +27,7 @@ var GameSchema = new Schema({
 });
 
 GameSchema.methods.join = function(userId) {
-  // If too many players, return 409 Conflict
+  // If too many players, reject.
   if (this.players.length >= this.maxPlayers) {
     return false;
   }
@@ -60,6 +60,12 @@ GameSchema.methods.resetCards = function() {
 
 GameSchema.methods.shuffleCards = function() {
   this.cards = _.shuffle(this.cards);
+};
+
+GameSchema.methods.dealCards = function() {
+  _.each(this.cards, function(card, i) {
+    card.owner = this.players[i % this.players.length];
+  }, this);
 };
 
 module.exports = mongoose.model('Game', GameSchema);

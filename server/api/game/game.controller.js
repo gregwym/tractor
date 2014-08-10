@@ -47,12 +47,13 @@ exports.update = function(req, res) {
     var playerIndex = game.players.indexOf(req.user._id);
     var rtnStatus;
     if (req.body.join) {
-      rtnStatus = game.join(req.user._id) || 409;
+      rtnStatus = game.join(req.user._id) || 403;
     } else if (req.body.quit) {
       rtnStatus = game.quit(req.user._id) || 400;
     } else if (req.body.start) {
       game.resetCards();
       game.shuffleCards();
+      game.dealCards();
     } else if (req.body.message) {
       rtnStatus = game.addMessage(req.body.message, req.user.name)
     } else {
