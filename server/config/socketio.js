@@ -17,6 +17,15 @@ function onConnect(socket) {
     console.info('[%s] %s', socket.address, JSON.stringify(data, null, 2));
   });
 
+  socket.on('join', function(data) {
+    console.log('User joining');
+    socket.join(data);
+  });
+
+  socket.on('leave', function(data) {
+    socket.leave(data);
+  });
+
   // Insert sockets below
   require('../api/game/game.socket').register(socket);
 }
@@ -32,10 +41,10 @@ module.exports = function (socketio) {
   // 1. You will need to send the token in `client/components/socket/socket.service.js`
   //
   // 2. Require authentication here:
-  // socketio.use(require('socketio-jwt').authorize({
-  //   secret: config.secrets.session,
-  //   handshake: true
-  // }));
+  socketio.use(require('socketio-jwt').authorize({
+    secret: config.secrets.session,
+    handshake: true
+  }));
 
   socketio.on('connection', function (socket) {
     socket.address = socket.handshake.address !== null ?
