@@ -38,11 +38,7 @@ GameSchema.methods.join = function(userId) {
 }
 
 GameSchema.methods.quit = function(userId) {
-  var playerIndex = this.players.indexOf(userId);
-  if (playerIndex < 0) {
-    return false;
-  }
-  this.players.splice(playerIndex, 1);
+  this.players.remove(userId);
   return this;
 }
 
@@ -52,6 +48,7 @@ GameSchema.methods.addMessage = function(content, sender) {
     date: new Date(),
     content: content
   });
+  return this;
 }
 
 GameSchema.methods.resetCards = function() {

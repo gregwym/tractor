@@ -18,7 +18,6 @@ function onConnect(socket) {
   });
 
   socket.on('join', function(data) {
-    console.log('User joining');
     socket.join(data);
   });
 

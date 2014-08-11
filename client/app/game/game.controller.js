@@ -12,9 +12,7 @@ angular.module('tractorApp')
       $scope.user = Auth.getCurrentUser();
 
       // Try join the game
-      $http.put(gameUrl, {
-        join: $scope.user
-      }).success(function(game) {
+      socket.join('game', gameId, function(game) {
         $scope.game = game;
         socket.syncItemUpdates('game', $scope.game, function(event) {
           if (event === 'deleted') {
@@ -29,9 +27,7 @@ angular.module('tractorApp')
       if ($scope.game) {
         socket.unsyncItemUpdates('game', $scope.game);
       }
-      $http.put(gameUrl, {
-        quit: $scope.user
-      });
+      socket.leave('game', gameId);
 
       _.each(off, function(unbind) {
         unbind();

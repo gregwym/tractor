@@ -17,6 +17,14 @@ angular.module('tractorApp')
     return {
       socket: socket,
 
+      join: function(modelName, id, cb) {
+        socket.emit('join', [modelName, id].join(':'), cb);
+      },
+
+      leave: function(modelName, id, cb) {
+        socket.emit('leave', [modelName, id].join(':'), cb);
+      },
+
       /**
        * Register listeners to sync an array with updates on a model
        *
